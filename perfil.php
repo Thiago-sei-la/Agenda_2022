@@ -271,7 +271,7 @@
                           while($show = $resultado->FETCH(PDO::FETCH_OBJ)){   
                     ?>
                     <tr>
-                      <td><img style="width: 41px; border-radius: 100%;" src="img/avatar5"></td>
+                    <td><img style="width: 41px; border-radius: 100%;" src="img/contato/<?php echo $show->foto_contato;?>"></td>
                       <td><?php echo $show->nome_contato;?></td>
                       <td><?php echo $show->telefone_contato;?></td>
                       <td><?php echo $show->email_contato;?></td>

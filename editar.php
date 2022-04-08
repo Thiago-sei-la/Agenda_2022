@@ -169,45 +169,39 @@
               </div>
               <!-- /.card-header -->
               <!-- form start -->
-             <?php
-             include_once('config/conexao2.php');
-               $id=$_GET['idUp'];
-               $select = "SELECT * FROM tb_contato WHERE id_contato=id";
-               try{
-                 $resultSel = $conect->prepare($select);
-                 $resultSel->bindParam(':id',$id,PDO::PARAM_INT);
-                 $resultSel->execute();
-
-                 $contar=$resultSel->rowCount();
-                 if($contar>0){
-                    while($show = $resultSel->FETCH(PDO::FETCH_OBJ)){
-                      $idContato = $show->id_contato;
+              <?php
+                include_once('config/conexao2.php');
+                $id=$_GET['idUp'];
+                $select = "SELECT * FROM tb_contato WHERE id_contato=:id";
+                try{
+                  $resultSel = $conect->prepare($select);
+                  $resultSel ->bindParam(':id',$id, PDO::PARAM_INT);
+                  $resultSel -> execute();
+                  $contar=$resultSel->rowCount();
+                  if($contar>0){
+                    while($show=$resultSel->FETCH(PDO::FETCH_OBJ)){
+                      $idContato = $show->id_contato; 
                       $nomeContato = $show->nome_contato;
-                      $foneContato = $show->telefone_contato;
+                      $foneContato = $show->telefone_contato;  
                       $emailContato = $show->email_contato;
                       $fotoContato = $show->foto_contato;
                     }
-                 }else{
-                   echo 'div class="alert alert-danger">
-                    Contato Não Cadastrado';
-                 }
-               }catch(PDOException $e){
-                 echo "<strong>";
-               }
-             ?>
-              <form action="" method="post" enctype="multipart/form-data">
+                  }
+                }catch(PDOException $id){}
+              ?>
+              <form action="" method="post" enctype="multipart/form-data"> <!-- serve para enviar um arquivo multimidia-->
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Nome</label>
-                    <input name="nome" type="text" class="form-control" id="exampleInputPassword1" value="<?php echo "$idContato";?>">
+                    <input name="nome" type="text" class="form-control" id="exampleInputPassword1" value="<?php echo $nomeContato ?>">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">Telefone</label>
-                    <input name="telefone" type="text" class="form-control" id="exampleInputPassword1" placeholder="Digite seu telefone...">
+                    <input name="telefone" type="text" class="form-control" id="exampleInputPassword1" value="<?php echo $foneContato ?>">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Endereço de E-mail</label>
-                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Digite o endereço de e-mail...">
+                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" value="<?php echo $emailContato ?>">
                   </div>
                   
                   <div class="form-group">
@@ -222,8 +216,6 @@
                   </div>
                   
                 </div>
-                <!-- /.card-body -->
-
                 <div class="card-footer">
                   <button name="btnUContato" type="submit" class="btn btn-primary">Editar Contato</button>
                 </div>
@@ -233,71 +225,68 @@
                       $nome = $_POST['nome'];
                       $telefone = $_POST['telefone'];
                       $email = $_POST['email'];
-
+                      
                       if(!empty($_FILES['foto']['name'])){
                         $formatP = array("png","jpg","jpeg","JPG","gif");
-                        $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-  
-                      if(in_array($extensao, $formatP)){
-                        $pasta = "img/contato/";
-                        $temporario = $_FILES['foto']['tmp_name'];
-                        $novoNome = uniqid().".$extensao";
-                        if(move_uploaded_file($temporario, $pasta.$novoNome)){
-                          
-                      }else{
-                        echo "Formato inválido";
-                      }
-                      }
-                  }else{
-                    $novoNome=$fotoContato;
-                  }  
-                  
-                    $editar = "UPDATE tb_contato SET nome_contato=:nome,telefone_contato=:telefone,email_contato=:email,foto_contato=:foto WHERE id_contato=:id";
-                    try{
-                      $result = $conect->prepare($editar);
-                      $result->bindParam(':id',$id,PDO::PARAM_STR);
-                      $result->bindParam(':nome',$nome,PDO::PARAM_STR);
-                      $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
-                      $result->bindParam(':email',$email,PDO::PARAM_STR);
-                      $result->bindParam(':foto',$novoNome,PDO::PARAM_STR);
-                      $result->execute();
+                        $extensao = pathinfo($_FILES['foto']['name'],PATHINFO_EXTENSION);
+                        if(in_array($extensao, $formatP)){
+                          $pasta = "img/contato/";
+                          $temporario = $_FILES['foto']['tmp_name'];
+                          $novoNome = uniqid().".$extensao";
+                          if(move_uploaded_file($temporario, $pasta.$novoNome)){
 
-                      $contar = $result->rowCount();
-                      if($contar > 0){
-                        echo '<div class="container">
-                                  <div class="alert alert-success alert-dismissible">
-                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                  <h5><i class="icon fas fa-check"></i> OK!</h5>
-                                  Contato inserido com sucesso !!!
-                                </div>
-                              </div>';
+                            
+                          }else{
+                            echo "Erro não foi possível fazer o upload do arquivo!";
+                          }
+                        }else{
+                          echo "Formato Inválido";
+                        }
                       }else{
-                        echo '<div class="container">
-                                  <div class="alert alert-danger alert-dismissible">
-                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                  <h5><i class="icon fas fa-check"></i> Ops!</h5>
-                                  Contato não cadastrados !!!
-                                </div>
-                              </div>';
+                        $novoNome = $fotoCont;
                       }
-                    }catch(PDOException $e){
-                      echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
-                    }
-                    }else{ 
-                        echo "Erro";
+                      $editar = "UPDATE tb_contato SET nome_contato=:nome,telefone_contato=:telefone,email_contato=:email,foto_contato=:foto WHERE id_contato=:id";
+                      $cadastro = "INSERT INTO tb_contato (nome_contato, telefone_contato, email_contato, foto_contato) VALUES (:nome, :telefone, :email, :foto)";
+                      try{
+                        $result = $conect->prepare($editar);
+                        $result->bindParam(':id',$id,PDO::PARAM_STR);
+                        $result->bindParam(':nome',$nome,PDO::PARAM_STR);
+                        $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
+                        $result->bindParam(':email',$email,PDO::PARAM_STR);
+                        $result->bindParam(':foto',$novoNome,PDO::PARAM_STR);
+                        $result->execute();
+                        $contar = $result->rowCount();
+                        if($contar > 0){
+                          echo '<div class="container">
+                                    <div class="alert alert-success alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-check"></i> OK!</h5>
+                                    Contato inserido com sucesso !!!
+                                  </div>
+                                </div>';
+                        }else{
+                          echo '<div class="container">
+                                    <div class="alert alert-danger alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-check"></i> Ops!</h5>
+                                    Contato não cadastrados !!!
+                                  </div>
+                                </div>';
+                        }
+                      }catch(PDOException $e){
+                        echo "<strong>ERRO DE CADASTRO PDO </strong>".$e->getMessage();
                       }
-                   
-                    
-              ?>
+                  }
+              ?> 
             </div>
           </div>
           <div class="col-md-7">
             <div class="card card-primary">
               <div class="card-body p-0" style="text-align:center;">
-                <img style="width:150px; border-radius:100%; margin-top:75px" src="img/contato/623b1891b570d.jpg">
-                <h1>Pedro Atilla 18</h1>
-                <h2>(085)992207402</h2>
-                <h4 style="margin-bottom:75px"> pedroatilla090@gmail.com</h4> 
+             <img style="margin-top:100px;width:150px;border-radius:100%" src="img/contato/<?php echo $fotoContato ?>"> 
+             <h1><?php echo $nomeContato ?></h1>
+             <h2><?php echo $foneContato ?></h2>
+             <h3 style="margin-bottom:100px;"><?php echo $emailContato ?></h3>
               </div>
               <!-- /.card-body -->
             </div>
