@@ -192,14 +192,14 @@
                     Contato Não Cadastrado';
                  }
                }catch(PDOException $e){
-                 echo "<strong>ERRO";
+                 echo "<strong>";
                }
              ?>
               <form action="" method="post" enctype="multipart/form-data">
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputPassword1">Nome</label>
-                    <input name="nome" type="text" class="form-control" id="exampleInputPassword1" placeholder="Digite o nome de contato...">
+                    <input name="nome" type="text" class="form-control" id="exampleInputPassword1" value="<?php echo "$idContato";?>">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword1">Telefone</label>
@@ -225,60 +225,69 @@
                 <!-- /.card-body -->
 
                 <div class="card-footer">
-                  <button name="btnCContato" type="submit" class="btn btn-primary">Editar Contato</button>
+                  <button name="btnUContato" type="submit" class="btn btn-primary">Editar Contato</button>
                 </div>
               </form>
               <?php
-                  if(isset($_POST['btnCContato'])){
+                  if(isset($_POST['btnUContato'])){
                       $nome = $_POST['nome'];
                       $telefone = $_POST['telefone'];
                       $email = $_POST['email'];
-                      $formatP = array("png","jpg","jpeg","JPG","gif");
-                      $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
 
-                    if(in_array($extensao, $formatP)){
-                      $pasta = "img/contato/";
-                      $temporario = $_FILES['foto']['tmp_name'];
-                      $novoNome = uniqid().".$extensao";
-                      if(move_uploaded_file($temporario, $pasta.$novoNome)){
-                        $cadastro = "INSERT INTO tb_contato (nome_contato, telefone_contato, email_contato, foto_contato) VALUES (:nome, :telefone, :email, :foto)";
-                      try{
-                        $result = $conect->prepare($cadastro);
-                        $result->bindParam(':nome',$nome,PDO::PARAM_STR);
-                        $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
-                        $result->bindParam(':email',$email,PDO::PARAM_STR);
-                        $result->bindParam(':foto',$novoNome,PDO::PARAM_STR);
-                        $result->execute();
-
-                        $contar = $result->rowCount();
-                        if($contar > 0){
-                          echo '<div class="container">
-                                    <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> OK!</h5>
-                                    Contato inserido com sucesso !!!
-                                  </div>
-                                </div>';
-                        }else{
-                          echo '<div class="container">
-                                    <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> Ops!</h5>
-                                    Contato não cadastrados !!!
-                                  </div>
-                                </div>';
-                        }
-                      }catch(PDOException $e){
-                        echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
+                      if(!empty($_FILES['foto']['name'])){
+                        $formatP = array("png","jpg","jpeg","JPG","gif");
+                        $extensao = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+  
+                      if(in_array($extensao, $formatP)){
+                        $pasta = "img/contato/";
+                        $temporario = $_FILES['foto']['tmp_name'];
+                        $novoNome = uniqid().".$extensao";
+                        if(move_uploaded_file($temporario, $pasta.$novoNome)){
+                          
+                      }else{
+                        echo "Formato inválido";
                       }
-                      }else{ 
-                          echo "Erro";
-                        }
-                      
-                    }else{
-                      echo "Formato inválido";
+                      }
+                  }else{
+                    $novoNome=$fotoContato;
+                  }  
+                  
+                    $editar = "UPDATE tb_contato SET nome_contato=:nome,telefone_contato=:telefone,email_contato=:email,foto_contato=:foto WHERE id_contato=:id";
+                    try{
+                      $result = $conect->prepare($editar);
+                      $result->bindParam(':id',$id,PDO::PARAM_STR);
+                      $result->bindParam(':nome',$nome,PDO::PARAM_STR);
+                      $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
+                      $result->bindParam(':email',$email,PDO::PARAM_STR);
+                      $result->bindParam(':foto',$novoNome,PDO::PARAM_STR);
+                      $result->execute();
+
+                      $contar = $result->rowCount();
+                      if($contar > 0){
+                        echo '<div class="container">
+                                  <div class="alert alert-success alert-dismissible">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                  <h5><i class="icon fas fa-check"></i> OK!</h5>
+                                  Contato inserido com sucesso !!!
+                                </div>
+                              </div>';
+                      }else{
+                        echo '<div class="container">
+                                  <div class="alert alert-danger alert-dismissible">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                  <h5><i class="icon fas fa-check"></i> Ops!</h5>
+                                  Contato não cadastrados !!!
+                                </div>
+                              </div>';
+                      }
+                    }catch(PDOException $e){
+                      echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
                     }
-                    }
+                    }else{ 
+                        echo "Erro";
+                      }
+                   
+                    
               ?>
             </div>
           </div>
