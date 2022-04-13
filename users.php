@@ -10,7 +10,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agenda JMF | Perfil</title>
+  <title>Agenda JMF | Relatório</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -151,7 +151,7 @@
                     Usuários
                   </p>
                 </a>
-              </li>      
+              </li>  
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -173,111 +173,91 @@
     <section class="content">
       <div class="container-fluid">
         <!-- Small boxes (Stat box) -->
-        
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-info">
+              <div class="inner">
+                <h3>200</h3>
+
+                <p>Cont. Horizonte</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-bag"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3>150</h3>
+
+                <p>Pacajus</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3>10</h3>
+
+                <p>Usuários</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-person-add"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+          <div class="col-lg-3 col-6">
+            <!-- small box -->
+            <div class="small-box bg-danger">
+              <div class="inner">
+                <h3>350</h3>
+
+                <p>Contatos</p>
+              </div>
+              <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+              </div>
+              <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+            </div>
+          </div>
+          <!-- ./col -->
+        </div>
         <!-- /.row -->
         <!-- Main row -->
         <div class="row">
-          <div class="col-md-5">
-            <div class="card card-primary">
+          <div class="col-md-12">
+          <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Cadastrar contato</h3>
+                <h3 class="card-title">Relatório de Contatos</h3>
               </div>
               <!-- /.card-header -->
-              <!-- form start -->
-              <form action="" method="post">
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Nome</label>
-                    <input name="nome" type="text" class="form-control" id="exampleInputPassword1" placeholder="Digite o nome de contato...">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputPassword1">Telefone</label>
-                    <input name="telefone" type="text" class="form-control" id="exampleInputPassword1" placeholder="Digite seu telefone...">
-                  </div>
-                  <div class="form-group">
-                    <label for="exampleInputEmail1">Endereço de E-mail</label>
-                    <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Digite o endereço de e-mail...">
-                  </div>
-                  
-                  <div class="form-group">
-                    <label for="exampleInputFile">Foto do contato</label>
-                    <div class="input-group">
-                      <div class="custom-file">
-                        <input name="foto" type="file" class="custom-file-input" id="exampleInputFile">
-                        <label class="custom-file-label" for="exampleInputFile">Upload da foto</label>
-                      </div>
-                      
-                    </div>
-                  </div>
-                  
-                </div>
-                <!-- /.card-body -->
-
-                <div class="card-footer">
-                  <button name="btnCContato" type="submit" class="btn btn-primary">Cadastrar Contato</button>
-                </div>
-              </form>
-              <?php
-                  include_once('config/conexao2.php');
-                  if(isset($_POST['btnCContato'])){
-                      $nome = $_POST['nome'];
-                      $telefone = $_POST['telefone'];
-                      $email = $_POST['email'];
-                      $foto = $_POST['foto'];
-
-                      $cadastro = "INSERT INTO tb_contato (nome_contato, telefone_contato, email_contato, foto_contato) VALUES (:nome, :telefone, :email, :foto)";
-                      try{
-                        $result = $conect->prepare($cadastro);
-                        $result->bindParam(':nome',$nome,PDO::PARAM_STR);
-                        $result->bindParam(':telefone',$telefone,PDO::PARAM_STR);
-                        $result->bindParam(':email',$email,PDO::PARAM_STR);
-                        $result->bindParam(':foto',$foto,PDO::PARAM_STR);
-                        $result->execute();
-
-                        $contar = $result->rowCount();
-                        if($contar > 0){
-                          echo '<div class="container">
-                                    <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> OK!</h5>
-                                    Contato inserido com sucesso !!!
-                                  </div>
-                                </div>';
-                        }else{
-                          echo '<div class="container">
-                                    <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> Ops!</h5>
-                                    Contato não cadastrados !!!
-                                  </div>
-                                </div>';
-                        }
-                      }catch(PDOException $e){
-                        echo "<strong>ERRO DE CADASTRO PDO = </strong>".$e->getMessage();
-                      }
-                  }
-              ?>
-            </div>
-          </div>
-          <div class="col-md-7">
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title">Ultimos contatos</h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <table class="table table-sm">
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
                   <thead>
-                    <tr>
-                      <th>Perfil</th>
-                      <th>Nome</th>
-                      <th>Telefone</th>
-                      <th>E-mail</th>
-                    </tr>
+                  <tr>
+                    <th>Foto do usuário</th>
+                    <th>Nome do usuário</th>
+                    <th>email do usuário</th>
+                    <th>Ações</th>
+                  </tr>
                   </thead>
                   <tbody>
                     <?php
-                      $select = "SELECT * FROM tb_contato ORDER BY id_contato DESC LIMIT 8";
+                    include_once('config/conexao2.php');
+                  $select = "SELECT * FROM tb_user ORDER BY id_user DESC LIMIT 8";
                       try{
                         $resultado = $conect->prepare($select);
                         $resultado->execute();
@@ -285,25 +265,44 @@
                         if($contar > 0){
                           while($show = $resultado->FETCH(PDO::FETCH_OBJ)){   
                     ?>
-                    <tr>
-                    <td><img style="width: 41px; border-radius: 100%;" src="img/contato/<?php echo $show->foto_contato;?>"></td>
-                      <td><?php echo $show->nome_contato;?></td>
-                      <td><?php echo $show->telefone_contato;?></td>
-                      <td><?php echo $show->email_contato;?></td>
-                    </tr>
-                    <?php
+                  <tr>
+                    <td style="text-align:center"><img style="width: 55px; border-radius:100%" src="img/user/<?php echo $show->foto_user;?>"</td>
+                    <td style="vertical=align:middle;"><?php echo $show->nome_user;?></td>
+                    <td style="vertical=align:middle;"><?php echo $show->email_user;?></td>
+                    <td style="vertical=align:middle;">
+                    <a href="editar2.php?idUp=<?php echo $show->id_user;?>" title="Editar" class="btn btn-success" ><img  src="svg/edit.png" style="width:25px;"></a>
+                    <a href="deletar2.php?idDel=<?php echo $show->id_user;?>" onclick="return confirm('Desejar tirar esse escarnio de vosso banco de dados meu bom lorde ?')" 
+                    title="Remover" class="btn btn-danger" style="margin-left:10px"><img style="width: 25px;" src="svg/Webster2.png"></a>
+                  </td>
+                  </tr>
+                  <?php
                       }
                     }else{
-                      echo "Contatos não existentes!!!";
+                      echo '<div class="container">
+                      <div class="alert alert-danger alert-dismissible">
+                      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                      <h5><i class="icon fas fa-check"></i> Ops!</h5>
+                      Contato não cadastrados !!!
+                    </div>';
                     }
                   }catch(PDOException $e){
                     echo '<strong>ERRO DE PDO= </strong>'.$e->getMessage();
                   }
                     ?>
-                    
                   </tbody>
+                  <tfoot>
+                  <tr>
+                  <th>Foto do usuário</th>
+                    <th>Nome do usuário</th>
+                    <th>email do usuário</th>
+                    <th>Ações</th>
+                  </tr>
+                  </tfoot>
                 </table>
               </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
               <!-- /.card-body -->
             </div>
           </div>
@@ -364,5 +363,28 @@
 <script src="dist/js/demo.js"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="dist/js/pages/dashboard.js"></script>
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 </body>
 </html>

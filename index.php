@@ -59,6 +59,15 @@
       </form>
       <?php 
       include_once('config/conexao2.php');
+      if(isset($_GET['acao'])){
+          $acao = $_GET['acao'];
+          //0000000echo $acao;
+          if($acao=='negado'){
+            echo  '<br> <div class="alert alert-danger" role="alert"> Hey Jude </div>';
+          }elseif ($acao=='sair') {
+            echo '<br> <div class="alert alert-danger" role="alert"> Take a sad song and make it better </div>';
+          }
+      }
       if(isset($_POST['btnlogin'])){
         $login=$_POST['email'];
         $senha=base64_encode($_POST['senha']);

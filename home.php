@@ -1,3 +1,11 @@
+<?php
+  ob_start(); //armazena coisas em cache
+  session_start();//inicia sessão
+  if(!isset($_SESSION['loginuser'])&&(!isset($_SESSION['senhauser']))){
+   header("Location: index.php?acao=negado");
+  }
+  include_once('sair.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -65,7 +73,7 @@
             
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item">
+          <a href="?sair" class="dropdown-item">
             <i class="fas fa-sign-out-alt"></i> Sair do sistema
           </a>
           
@@ -120,6 +128,15 @@
                     Painel
                   </p>
                 </a>
+                </li>
+              <li class="nav-item">
+                <a href="perfil.php" class="nav-link">
+                  <i class="nav-icon fas fa-address-card"></i>
+                  <p>
+                    Perfl
+                  </p>
+                </a>
+              </li>     
               </li>
               <li class="nav-item">
                 <a href="relatorio.php" class="nav-link">
@@ -128,15 +145,14 @@
                     Relatório
                   </p>
                 </a>
-              </li>
-              <li class="nav-item">
-                <a href="perfil.php" class="nav-link">
-                  <i class="nav-icon fas fa-address-card"></i>
+              <li class="nav-item" >
+                 <a href="users.php" class="nav-link">
+                 <i class="nav-icon fas fa-book"></i>
                   <p>
-                    Perfl
+                    Usuários
                   </p>
                 </a>
-              </li>       
+              </li>  
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
